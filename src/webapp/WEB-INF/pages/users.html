@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,8 +19,28 @@
             <td th:text="${user.name}">Name</td>
             <td th:text="${user.lastName}">LastName</td>
             <td th:text="${user.age}">Age</td>
+
+
+            <td>
+                <form th:method="GET" th:action="@{/users/edit}">
+                    <button type="submit" th:name="id" th:value="${user.id}">EDIT USER
+                    </button>
+                </form>
+            </td>
+
+            <td>
+                <form th:method="GET" th:action="@{/users/delete}">
+                    <button type="submit" th:name="id" th:value="${user.id}">DELETE USER
+                    </button>
+                </form>
+            </td>
+
+
         </tr>
     </table>
+    <br/>
+    <input type="button" value="Add User"
+           onclick="window.location.href = 'users/new'">
 </div>
 </body>
 </html>

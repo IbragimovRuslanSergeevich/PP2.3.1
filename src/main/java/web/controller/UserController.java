@@ -11,7 +11,6 @@ import web.service.UserService;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -21,21 +20,46 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping("/users")
     public String show(Model model) {
         model.addAttribute("users", userService.getUsersList());
         return "users";
     }
 
-    @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") User user) {
-        return "new";
+    @GetMapping(value = "/users", params = "id")
+    public String showIdUser(@RequestParam(value = "id") int id, Model model) {
+        model.addAttribute("user", userService.getUser(id));
+        return "id_user";
     }
 
 
-    @PostMapping()
+    @GetMapping("/users/new")
+    public String newUser(Model model) {
+        model.addAttribute("user", new User());
+        return "new";
+    }
+
+    @PostMapping("/users")
     public String createUser(@ModelAttribute("user") @Valid User user) {
         userService.addUser(user);
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users/delete")
+    public String deleteUser(@RequestParam(value = "id") int id) {
+        userService.deleteUser(id);
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users/edit")
+    public String editUserForm(Model model, @RequestParam("id") int id) {
+        model.addAttribute("user", userService.getUser(id));
+        return "edit";
+    }
+
+    @PostMapping("/users/edit{id}")
+    public String editUser(@ModelAttribute("user") @Valid User user) {
+        userService.editUser(user);
         return "redirect:/users";
     }
 }
